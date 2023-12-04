@@ -24,7 +24,7 @@ input {
 .gallery {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px
+    gap: 20px;
 }
 
 .photo-card {

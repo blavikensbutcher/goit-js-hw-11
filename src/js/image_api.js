@@ -4,7 +4,7 @@ export { getImages }
 
 
 
-function getImages(input, page = 1) {
+async function getImages(input, page = 1) {
     Notiflix.Loading.hourglass('Loading...');
 
     const options = {
@@ -17,14 +17,8 @@ function getImages(input, page = 1) {
         per_page: '40'
     }
 
-
     const params = new URLSearchParams(options)
 
-    return axios.get(`https://pixabay.com/api/?${params}`)
-        .then(response => {
-            Notiflix.Loading.remove('body');
-            return response.data
-            
-        })
-        .catch(error => console.log(Notiflix.Report.failure("CONNECTION ERROR", String(error), "OK")))
+    const res = await axios.get(`https://pixabay.com/api/?${params}`)
+    return res.data
 }

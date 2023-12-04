@@ -8,6 +8,8 @@ import Notiflix from "notiflix";
 
 
 
+
+
 const selectors = {
     form: document.querySelector('.search-form'),
     input: document.querySelector('#input'),
@@ -121,7 +123,7 @@ async function handleForm(e) {
                 captionDelay: 250
             });
 
-
+            Notiflix.Loading.remove();
 
         })
 }
