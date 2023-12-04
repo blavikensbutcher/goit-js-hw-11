@@ -3,7 +3,8 @@ import Notiflix from "notiflix";
 export { getImages }
 
 
-function getImages(input, page) {
+
+function getImages(input, page = 1) {
     Notiflix.Block.pulse('body', 'Loading...');
 
     const options = {
@@ -12,7 +13,7 @@ function getImages(input, page) {
         image_type: 'photo',
         orientation: 'horizontal',
         safesearch: 'true',
-        page: 1,
+        page: page,
         per_page: '40'
     }
 
