@@ -1,9 +1,7 @@
 import axios from "axios"
 import Notiflix from "notiflix";
-export { getImages, page }
+export { getImages }
 
-
-let page = 1;
 
 function getImages(input, page) {
     Notiflix.Block.pulse('body', 'Loading...');
@@ -18,7 +16,6 @@ function getImages(input, page) {
         per_page: '40'
     }
 
-    page = options.page + 1;
 
     const params = new URLSearchParams(options)
 

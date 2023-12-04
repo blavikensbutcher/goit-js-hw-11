@@ -1,5 +1,4 @@
-import { mark } from "@vimeo/player";
-import { getImages, page} from "./image_api"
+import { getImages } from "./image_api"
 
 import Notiflix from "notiflix"
 
@@ -17,7 +16,7 @@ selectors.button.addEventListener('click', handleClick)
 
 selectors.button.style.display = 'none'
 
-let paginationPage = page;
+let paginationPage = 1;
 
 
 function handleClick() {
