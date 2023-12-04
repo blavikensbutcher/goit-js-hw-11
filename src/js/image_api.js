@@ -5,7 +5,7 @@ export { getImages }
 
 
 function getImages(input, page = 1) {
-    Notiflix.Block.pulse('body', 'Loading...');
+    Notiflix.Loading.hourglass('Loading...');
 
     const options = {
         key: '41061573-024b7cbeabeac3d17174d6333',
@@ -22,7 +22,7 @@ function getImages(input, page = 1) {
 
     return axios.get(`https://pixabay.com/api/?${params}`)
         .then(response => {
-            Notiflix.Block.remove('body');
+            Notiflix.Loading.remove('body');
             return response.data
             
         })

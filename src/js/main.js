@@ -32,7 +32,7 @@ function handleClick() {
         .then(response => {
             ///////CHECK WHATS PAGE IS IT
             if (paginationPage * 40 >= response.total) {
-                Notiflix.Notify.info("We're sorry, but you've reached the end of search results");
+                Notiflix.Notify.warning("We're sorry, but you've reached the end of search results");
                 selectors.button.style.display = 'none'
             }
             //////CREATE MARKUP
@@ -60,6 +60,7 @@ function handleClick() {
             ////////INSERT HTML
             selectors.gallery.insertAdjacentHTML('beforeend', newMarkup);
 
+
             ////////ADD LIGHTBOX
             let lightbox = new simpleLightbox('.gallery a', {
                 overlayOpacity: 0.8,
@@ -82,7 +83,7 @@ async function handleForm(e) {
 
             ////////CHECK TOTAL RESULT////////
             if (response.total === 0) {
-                Notiflix.Notify.info("Sorry, there are no images matching your search query. Please try again.")
+                Notiflix.Notify.warning("Sorry, there are no images matching your search query. Please try again.")
                 selectors.button.style.display = 'none'
             }
 
@@ -111,6 +112,7 @@ async function handleForm(e) {
             ////////INSERT HTML/////////
             selectors.gallery.innerHTML = markup;
 
+
             ////////ADD LIGHTBOX/////////
             let lightbox = new simpleLightbox('.gallery a', {
                 overlayOpacity: 0.8,
@@ -118,6 +120,8 @@ async function handleForm(e) {
                 captionsData: 'alt',
                 captionDelay: 250
             });
+
+
 
         })
 }
