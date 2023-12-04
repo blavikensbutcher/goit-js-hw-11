@@ -23,7 +23,8 @@ function getImages(input, page = 1) {
     return axios.get(`https://pixabay.com/api/?${params}`)
         .then(response => {
             Notiflix.Block.remove('body');
-            return response.data.hits
+            return response.data
+            
         })
         .catch(error => console.log(Notiflix.Report.failure("CONNECTION ERROR", String(error), "OK")))
 }

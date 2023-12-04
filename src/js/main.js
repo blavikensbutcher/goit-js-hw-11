@@ -20,11 +20,16 @@ let paginationPage = 1;
 
 
 function handleClick() {
+
     paginationPage += 1;
 
     getImages(`${selectors.form.input.value}`, paginationPage)
     .then(response => {
-        const newMarkup = response.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) =>
+        if (paginationPage * 40 >= response.total) {
+            Notiflix.Notify.info("We're sorry, but you've reached the end of search results");
+            selectors.button.style.display = 'none'
+        }
+        const newMarkup = response.hits.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) =>
             `<div class="photo-card">
     <img src="${webformatURL}" alt="${tags}" loading="lazy" height="390" width="600"/>
     <div class="info">
@@ -51,9 +56,15 @@ function handleClick() {
 
 async function handleForm(e) {
     e.preventDefault();
+    paginationPage = 1;
     await getImages(`${selectors.form.input.value}`)
         .then(response => {
-            const markup = response.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) =>
+            selectors.button.style.display = 'block'
+            if (response.total === 0){
+                Notiflix.Notify.info("Sorry, there are no images matching your search query. Please try again.")
+                selectors.button.style.display = 'none'
+            }
+            const markup = response.hits.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) =>
                 `<div class="photo-card">
         <img src="${webformatURL}" alt="${tags}" loading="lazy" height="390" width="600"/>
         <div class="info">
@@ -72,11 +83,8 @@ async function handleForm(e) {
         </div>
     </div>`).join('')
             selectors.gallery.innerHTML = markup
-            selectors.button.style.display = 'block'
+            
 
         })
 }
 
-
-//if data is empty
-// Notiflix.Notify.info("Sorry, there are no images matching your search query. Please try again.")
