@@ -24,7 +24,7 @@ async function handleForm(e) {
     e.preventDefault();
     await getImages(`${selectors.form.input.value}`)
         .then(response => {
-            markup = response.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) =>
+            const markup = response.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) =>
                 `<div class="photo-card">
         <img src="${webformatURL}" alt="${tags}" loading="lazy" height="390" width="600"/>
         <div class="info">
