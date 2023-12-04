@@ -1,0 +1,49 @@
+.search-form {
+    display: block;
+    padding-left: 80vh;
+    padding-top: 25px;
+}
+
+.form-container {
+    height: 70px;
+    background: linear-gradient(35deg, rgb(69, 69, 71), rgb(74, 164, 167));
+    }
+
+button {
+    border: none;
+    font-size: 16px;
+}
+
+input {
+    border: none;
+    font-size: 16px;
+}
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px
+}
+
+.photo-card {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+
+}
+
+.info {
+    display: flex;
+    gap: 50px;
+   align-items: center;
+   justify-content: center;
+}
+
+.info-item b {
+    display: flex;
+    font-weight: 400;
+}
+
+img {
+    object-fit: cover;
+}
