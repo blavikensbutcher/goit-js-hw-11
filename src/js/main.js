@@ -7,13 +7,15 @@ import Notiflix from "notiflix"
 const selectors = {
     form: document.querySelector('.search-form'),
     input: document.querySelector('#input'),
-    gallery: document.querySelector('.gallery')
+    gallery: document.querySelector('.gallery'),
+    button: document.querySelector('.load-more')
 }
+
+
 
 selectors.form.addEventListener('submit', handleForm)
 
-
-
+selectors.button.style.display = 'none'
 
 
 
@@ -22,9 +24,7 @@ async function handleForm(e) {
     e.preventDefault();
     await getImages(`${selectors.form.input.value}`)
         .then(response => {
-            console.log(response);
-
-            const markup = response.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) =>
+            markup = response.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) =>
                 `<div class="photo-card">
         <img src="${webformatURL}" alt="${tags}" loading="lazy" height="390" width="600"/>
         <div class="info">
@@ -43,10 +43,9 @@ async function handleForm(e) {
         </div>
     </div>`).join('')
             selectors.gallery.innerHTML = markup
-
+            selectors.button.style.display = 'block'
 
         })
-
 }
 
 

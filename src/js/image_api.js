@@ -1,12 +1,12 @@
 import axios from "axios"
 import Notiflix from "notiflix";
-export { getImages }
+export { getImages, page }
 
 
-// let page = 1;
+let page = 1;
 
 function getImages(input) {
-    Notiflix.Block.pulse('.photo-card', 'Loading...');
+    Notiflix.Block.pulse('body', 'Loading...');
 
     const options = {
         key: '41061573-024b7cbeabeac3d17174d6333',
@@ -14,7 +14,7 @@ function getImages(input) {
         image_type: 'photo',
         orientation: 'horizontal',
         safesearch: 'true',
-        // page: page,
+        page: page,
         per_page: '40'
 
     }
@@ -23,7 +23,7 @@ function getImages(input) {
 
     return axios.get(`https://pixabay.com/api/?${params}`)
         .then(response => {
-            Notiflix.Block.remove('.photo-card');
+            Notiflix.Block.remove('body');
             return response.data.hits
         })
         .catch(error => console.log(Notiflix.Report.failure("CONNECTION ERROR", String(error), "OK")))
