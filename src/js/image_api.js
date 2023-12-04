@@ -5,7 +5,7 @@ export { getImages, page }
 
 let page = 1;
 
-function getImages(input) {
+function getImages(input, page) {
     Notiflix.Block.pulse('body', 'Loading...');
 
     const options = {
@@ -14,10 +14,11 @@ function getImages(input) {
         image_type: 'photo',
         orientation: 'horizontal',
         safesearch: 'true',
-        page: page,
+        page: 1,
         per_page: '40'
-
     }
+
+    page = options.page + 1;
 
     const params = new URLSearchParams(options)
 
