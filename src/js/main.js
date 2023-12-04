@@ -70,6 +70,8 @@ function handleClick() {
                 captionsData: 'alt',
                 captionDelay: 250
             });
+
+            Notiflix.Loading.remove();
         }
         )
 }
