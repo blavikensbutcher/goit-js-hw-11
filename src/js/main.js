@@ -32,45 +32,25 @@ function handleClick() {
 
     getImages(`${selectors.form.input.value}`, paginationPage)
         .then(response => {
-            ///////CHECK WHATS PAGE IS IT
+
+            ///////CHECK WHATS PAGE IS IT//////////
             if (paginationPage * 40 >= response.total) {
                 Notiflix.Notify.warning("We're sorry, but you've reached the end of search results");
                 selectors.button.style.display = 'none'
             }
-            //////CREATE MARKUP
-            const newMarkup = response.hits.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) =>
-                `<div class="photo-card item">
-            <a href="${largeImageURL}">
-                <img src="${webformatURL}" alt="${tags}" loading="lazy" height="390" width="600"/>
-            </a>
-        <div class="info">
-            <p class="info-item">
-                <b>Likes: ${likes}</b>
-            </p>
-            <p class="info-item">
-                <b>Views: ${views}</b>
-            </p>
-            <p class="info-item">
-                <b>Comments: ${comments}</b>
-            </p>
-            <p class="info-item">
-                <b>Downloads: ${downloads}</b>
-            </p>
-        </div>
-            </div>`).join('')
-
-            ////////INSERT HTML
-            selectors.gallery.insertAdjacentHTML('beforeend', newMarkup);
+          
+            ////////CREATE MARKUP////////
+            selectors.gallery.insertAdjacentHTML('beforeend', createMarkup(response.hits));
 
 
-            ////////ADD LIGHTBOX
+            ////////ADD LIGHTBOX//////////
             let lightbox = new simpleLightbox('.gallery a', {
                 overlayOpacity: 0.8,
                 captionSelector: 'img',
                 captionsData: 'alt',
                 captionDelay: 250
             });
-
+            ////////REMOVE LOADER///////
             Notiflix.Loading.remove();
         }
         )
@@ -84,37 +64,20 @@ async function handleForm(e) {
         .then(response => {
             ///////BUTTON SHOW///////
             selectors.button.style.display = 'block'
+            
 
-            ////////CHECK TOTAL RESULT////////
+            ////////IF THERES NO RESULTS HIDE BUTTON////////
             if (response.total === 0) {
                 Notiflix.Notify.warning("Sorry, there are no images matching your search query. Please try again.")
                 selectors.button.style.display = 'none'
             }
+            ////////IF RESULTS LESS THEN 40 DONT SHOW BUTTON//////
+            if (response.total <= 40) {
+                selectors.button.style.display = 'none'
+            }
 
             /////////CREATE MARKUP///////
-            const markup = response.hits.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) =>
-                `<div class="photo-card">
-            <a href="${largeImageURL}">
-                <img src="${webformatURL}" alt="${tags}" loading="lazy" height="390" width="600"/>
-            </a>
-        <div class="info">
-            <p class="info-item">
-                <b>Likes: ${likes}</b>
-            </p>
-            <p class="info-item">
-                <b>Views: ${views}</b>
-            </p>
-            <p class="info-item">
-                <b>Comments: ${comments}</b>
-            </p>
-            <p class="info-item">
-                <b>Downloads: ${downloads}</b>
-            </p>
-        </div>
-            </div>`).join('')
-
-            ////////INSERT HTML/////////
-            selectors.gallery.innerHTML = markup;
+            selectors.gallery.innerHTML = createMarkup(response.hits);
 
 
             ////////ADD LIGHTBOX/////////
@@ -124,9 +87,33 @@ async function handleForm(e) {
                 captionsData: 'alt',
                 captionDelay: 250
             });
-
+            ////////REMOVE LOADER///////
             Notiflix.Loading.remove();
 
         })
 }
 
+
+function createMarkup(arr) {
+    const result = arr.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) =>
+        `<div class="photo-card item">
+<a href="${largeImageURL}">
+    <img src="${webformatURL}" alt="${tags}" loading="lazy" height="390" width="600"/>
+</a>
+<div class="info">
+<p class="info-item">
+    <b>Likes: ${likes}</b>
+</p>
+<p class="info-item">
+    <b>Views: ${views}</b>
+</p>
+<p class="info-item">
+    <b>Comments: ${comments}</b>
+</p>
+<p class="info-item">
+    <b>Downloads: ${downloads}</b>
+</p>
+</div>
+</div>`).join('')
+    return result;
+}
