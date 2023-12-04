@@ -1,6 +1,11 @@
-import { getImages } from "./image_api"
+import { getImages } from "./image_api";
+import simpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
+import Notiflix from "notiflix";
 
-import Notiflix from "notiflix"
+
+
+
 
 
 const selectors = {
@@ -24,49 +29,18 @@ function handleClick() {
     paginationPage += 1;
 
     getImages(`${selectors.form.input.value}`, paginationPage)
-    .then(response => {
-        if (paginationPage * 40 >= response.total) {
-            Notiflix.Notify.info("We're sorry, but you've reached the end of search results");
-            selectors.button.style.display = 'none'
-        }
-        const newMarkup = response.hits.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) =>
-            `<div class="photo-card">
-    <img src="${webformatURL}" alt="${tags}" loading="lazy" height="390" width="600"/>
-    <div class="info">
-        <p class="info-item">
-            <b>Likes: ${likes}</b>
-        </p>
-        <p class="info-item">
-            <b>Views: ${views}</b>
-        </p>
-        <p class="info-item">
-            <b>Comments: ${comments}</b>
-        </p>
-        <p class="info-item">
-            <b>Downloads: ${downloads}</b>
-        </p>
-    </div>
-</div>`).join('')
-        selectors.gallery.insertAdjacentHTML('beforeend', newMarkup)
-        console.log(paginationPage)
-    }
-)
-}
-
-
-async function handleForm(e) {
-    e.preventDefault();
-    paginationPage = 1;
-    await getImages(`${selectors.form.input.value}`)
         .then(response => {
-            selectors.button.style.display = 'block'
-            if (response.total === 0){
-                Notiflix.Notify.info("Sorry, there are no images matching your search query. Please try again.")
+            ///////CHECK WHATS PAGE IS IT
+            if (paginationPage * 40 >= response.total) {
+                Notiflix.Notify.info("We're sorry, but you've reached the end of search results");
                 selectors.button.style.display = 'none'
             }
-            const markup = response.hits.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) =>
-                `<div class="photo-card">
-        <img src="${webformatURL}" alt="${tags}" loading="lazy" height="390" width="600"/>
+            //////CREATE MARKUP
+            const newMarkup = response.hits.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) =>
+                `<div class="photo-card item">
+            <a href="${largeImageURL}">
+                <img src="${webformatURL}" alt="${tags}" loading="lazy" height="390" width="600"/>
+            </a>
         <div class="info">
             <p class="info-item">
                 <b>Likes: ${likes}</b>
@@ -81,9 +55,69 @@ async function handleForm(e) {
                 <b>Downloads: ${downloads}</b>
             </p>
         </div>
-    </div>`).join('')
-            selectors.gallery.innerHTML = markup
-            
+            </div>`).join('')
+
+            ////////INSERT HTML
+            selectors.gallery.insertAdjacentHTML('beforeend', newMarkup);
+
+            ////////ADD LIGHTBOX
+            let lightbox = new simpleLightbox('.gallery a', {
+                overlayOpacity: 0.8,
+                captionSelector: 'img',
+                captionsData: 'alt',
+                captionDelay: 250
+            });
+        }
+        )
+}
+
+
+async function handleForm(e) {
+    e.preventDefault();
+    paginationPage = 1;
+    await getImages(`${selectors.form.input.value}`)
+        .then(response => {
+            ///////BUTTON SHOW///////
+            selectors.button.style.display = 'block'
+
+            ////////CHECK TOTAL RESULT////////
+            if (response.total === 0) {
+                Notiflix.Notify.info("Sorry, there are no images matching your search query. Please try again.")
+                selectors.button.style.display = 'none'
+            }
+
+            /////////CREATE MARKUP///////
+            const markup = response.hits.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) =>
+                `<div class="photo-card">
+            <a href="${largeImageURL}">
+                <img src="${webformatURL}" alt="${tags}" loading="lazy" height="390" width="600"/>
+            </a>
+        <div class="info">
+            <p class="info-item">
+                <b>Likes: ${likes}</b>
+            </p>
+            <p class="info-item">
+                <b>Views: ${views}</b>
+            </p>
+            <p class="info-item">
+                <b>Comments: ${comments}</b>
+            </p>
+            <p class="info-item">
+                <b>Downloads: ${downloads}</b>
+            </p>
+        </div>
+            </div>`).join('')
+
+            ////////INSERT HTML/////////
+            selectors.gallery.innerHTML = markup;
+
+            ////////ADD LIGHTBOX/////////
+            let lightbox = new simpleLightbox('.gallery a', {
+                overlayOpacity: 0.8,
+                captionSelector: 'img',
+                captionsData: 'alt',
+                captionDelay: 250
+            });
 
         })
 }
