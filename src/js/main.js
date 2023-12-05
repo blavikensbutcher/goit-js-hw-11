@@ -51,7 +51,7 @@ function handleClick() {
                 captionDelay: 250
             });
             ////////REMOVE LOADER///////
-            Notiflix.Loading.remove();
+            Notiflix.Loading.remove(1100);
         }
         )
 }
@@ -88,7 +88,7 @@ async function handleForm(e) {
                 captionDelay: 250
             });
             ////////REMOVE LOADER///////
-            Notiflix.Loading.remove();
+            Notiflix.Loading.remove(1100);
 
         })
 }

@@ -5,7 +5,7 @@ export { getImages }
 
 
 async function getImages(input, page = 1) {
-    Notiflix.Loading.hourglass('Loading...');
+
 
     const options = {
         key: '41061573-024b7cbeabeac3d17174d6333',
@@ -20,5 +20,6 @@ async function getImages(input, page = 1) {
     const params = new URLSearchParams(options)
 
     const res = await axios.get(`https://pixabay.com/api/?${params}`)
+    Notiflix.Loading.hourglass(`Ми знайшли ${res.data.total} результатів`);
     return res.data
 }
