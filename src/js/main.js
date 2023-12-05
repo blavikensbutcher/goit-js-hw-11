@@ -5,17 +5,19 @@ import Notiflix from "notiflix";
 
 
 
-
-
-
-
-
 const selectors = {
     form: document.querySelector('.search-form'),
     input: document.querySelector('#input'),
     gallery: document.querySelector('.gallery'),
     button: document.querySelector('.load-more')
 }
+
+let lightbox = new simpleLightbox('.gallery a', {
+    overlayOpacity: 0.8,
+    captionSelector: 'img',
+    captionsData: 'alt',
+    captionDelay: 250
+});
 
 
 selectors.form.addEventListener('submit', handleForm)
@@ -32,24 +34,19 @@ function handleClick() {
 
     getImages(`${selectors.form.input.value}`, paginationPage)
         .then(response => {
-
+        console.log(response);
             ///////CHECK WHATS PAGE IS IT//////////
-            if (paginationPage * 40 >= response.total) {
+            if (paginationPage * 40 >= response.totalHits) {
                 Notiflix.Notify.warning("We're sorry, but you've reached the end of search results");
                 selectors.button.style.display = 'none'
             }
-          
+            
             ////////CREATE MARKUP////////
             selectors.gallery.insertAdjacentHTML('beforeend', createMarkup(response.hits));
 
 
             ////////ADD LIGHTBOX//////////
-            let lightbox = new simpleLightbox('.gallery a', {
-                overlayOpacity: 0.8,
-                captionSelector: 'img',
-                captionsData: 'alt',
-                captionDelay: 250
-            });
+         lightbox.refresh()
             ////////REMOVE LOADER///////
             Notiflix.Loading.remove(1100);
         }
@@ -62,17 +59,18 @@ async function handleForm(e) {
     paginationPage = 1;
     await getImages(`${selectors.form.input.value}`)
         .then(response => {
+            console.log(response);
             ///////BUTTON SHOW///////
             selectors.button.style.display = 'block'
             
 
             ////////IF THERES NO RESULTS HIDE BUTTON////////
-            if (response.total === 0) {
+            if (response.totalHits === 0) {
                 Notiflix.Notify.warning("Sorry, there are no images matching your search query. Please try again.")
                 selectors.button.style.display = 'none'
             }
             ////////IF RESULTS LESS THEN 40 DONT SHOW BUTTON//////
-            if (response.total <= 40) {
+            if (response.totalHits <= 40) {
                 selectors.button.style.display = 'none'
             }
 
@@ -81,12 +79,7 @@ async function handleForm(e) {
 
 
             ////////ADD LIGHTBOX/////////
-            let lightbox = new simpleLightbox('.gallery a', {
-                overlayOpacity: 0.8,
-                captionSelector: 'img',
-                captionsData: 'alt',
-                captionDelay: 250
-            });
+            lightbox.refresh()
             ////////REMOVE LOADER///////
             Notiflix.Loading.remove(1100);
 

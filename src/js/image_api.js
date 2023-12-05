@@ -20,6 +20,6 @@ async function getImages(input, page = 1) {
     const params = new URLSearchParams(options)
 
     const res = await axios.get(`https://pixabay.com/api/?${params}`)
-    Notiflix.Loading.hourglass(`Ми знайшли ${res.data.total} результатів`);
+    Notiflix.Loading.hourglass(`Ми знайшли ${res.data.totalHits} результатів`);
     return res.data
 }
