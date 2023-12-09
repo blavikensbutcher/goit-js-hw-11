@@ -12,7 +12,7 @@ const selectors = {
     button: document.querySelector('.load-more')
 }
 
-let lightbox = new simpleLightbox('.gallery a', {
+const lightbox = new simpleLightbox('.gallery a', {
     overlayOpacity: 0.8,
     captionSelector: 'img',
     captionsData: 'alt',
@@ -34,19 +34,19 @@ function handleClick() {
 
     getImages(`${selectors.form.input.value}`, paginationPage)
         .then(response => {
-        console.log(response);
+            console.log(response);
             ///////CHECK WHATS PAGE IS IT//////////
             if (paginationPage * 40 >= response.totalHits) {
                 Notiflix.Notify.warning("We're sorry, but you've reached the end of search results");
                 selectors.button.style.display = 'none'
             }
-            
+
             ////////CREATE MARKUP////////
             selectors.gallery.insertAdjacentHTML('beforeend', createMarkup(response.hits));
 
 
             ////////ADD LIGHTBOX//////////
-         lightbox.refresh()
+            lightbox.refresh()
             ////////REMOVE LOADER///////
             Notiflix.Loading.remove(1100);
         }
@@ -62,7 +62,7 @@ async function handleForm(e) {
             console.log(response);
             ///////BUTTON SHOW///////
             selectors.button.style.display = 'block'
-            
+
 
             ////////IF THERES NO RESULTS HIDE BUTTON////////
             if (response.totalHits === 0) {
